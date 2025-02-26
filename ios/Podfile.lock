@@ -1261,6 +1261,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-maps (1.20.1):
+    - React-Core
   - react-native-safe-area-context (5.2.0):
     - DoubleConversion
     - glog
@@ -1860,6 +1862,7 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
+  - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -1983,6 +1986,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-blur:
     :path: "../node_modules/@react-native-community/blur"
+  react-native-maps:
+    :path: "../node_modules/react-native-maps"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
@@ -2100,6 +2105,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 3c11cee7737609275c7b66bd0b1de475f094cedf
   React-microtasksnativemodule: 843f352b32aacbe13a9c750190d34df44c3e6c2c
   react-native-blur: c4d838e8cd2896379328aec8a600c6ddad589c78
+  react-native-maps: 9febd31278b35cd21e4fad2cf6fa708993be5dab
   react-native-safe-area-context: 7e513d737b0b5c1d10bbe0e5fcc9f925a7be144c
   react-native-slider: bb7eb4732940fab78217e1c096bb647d8b0d1cf3
   React-NativeModulesApple: 88433b6946778bea9c153e27b671de15411bf225

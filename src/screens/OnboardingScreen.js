@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 
 const fontInter18ptRegular = 'Inter18pt-Regular';
 
+const fontMontserratBold = 'Montserrat-Bold';
+
 const OnboardingScreen = () => {
   const [dimensions, setDimensions] = useState(Dimensions.get('window'));
   const navigation = useNavigation();
@@ -48,26 +50,25 @@ const OnboardingScreen = () => {
     <View style={{
       width: dimensions.width * 0.9,
       flex: 1,
-      borderColor: 'white',
       alignItems: 'center',
-      borderWidth: dimensions.width * 0.019,
       borderRadius: dimensions.width * 0.05,
-      backgroundColor: '#0D0172',
     }} >
       <View style={{
-        height: dimensions.height * 0.35,
-        padding: dimensions.height * 0.03,
         alignItems: 'center',
         justifyContent: 'center',
-        width: dimensions.width * 0.9,
         alignSelf: 'center',
+        borderWidth: dimensions.width * 0.019,
+        borderColor: '#FFC10E',
+        borderRadius: dimensions.width * 0.05,
+        marginTop: dimensions.height * 0.1,
       }}>
         <Image
           resizeMode="contain"
           source={item.image}
           style={{
-            height: '100%',
-            width: '91%',
+            width: dimensions.width * 0.61,
+            height: dimensions.width * 0.61,
+            borderRadius: dimensions.width * 0.037,
           }}
         />
 
@@ -76,104 +77,81 @@ const OnboardingScreen = () => {
 
       <Text
         style={{
-          fontSize: dimensions.width * 0.077,
-          fontFamily: fontInter18ptRegular,
+          fontSize: dimensions.width * 0.07,
+          marginTop: dimensions.height * 0.1,
+          fontFamily: fontMontserratBold,
           maxWidth: '91%',
           color: 'white',
-          marginTop: 21,
           textAlign: 'center',
           fontWeight: 900,
         }}>
         {item.title}
       </Text>
-      <Text
-        style={{
-          fontFamily: fontInter18ptRegular,
-          fontSize: dimensions.width * 0.046,
-          top: dimensions.height * 0.025,
-          paddingHorizontal: 21,
-          color: 'white',
-          textAlign: 'center',
-          marginTop: 8,
-          fontWeight: 700
-        }}>
-        {item.description}
-      </Text>
     </View>
   );
 
   return (
-    <ImageBackground
-      source={require('../assets/images/onboardingWolfImages/onbBg.png')}
-      style={{
-        width: dimensions.width,
-        height: dimensions.height
-      }}
+
+    <SafeAreaView
+      style={{ justifyContent: 'space-between', flex: 1, alignItems: 'center', backgroundColor: '#008B47' }}
     >
-      <SafeAreaView
-        style={{ justifyContent: 'space-between', flex: 1, alignItems: 'center', }}
+
+
+      <View style={{
+        display: 'flex',
+        width: dimensions.width * 0.9,
+        height: dimensions.height * 0.7,
+        borderRadius: dimensions.width * 0.1,
+        alignSelf: 'center'
+      }}>
+        <FlatList
+          data={hungryWolfOnboardingData}
+          renderItem={renderWolfItem}
+          bounces={false}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+          keyExtractor={(item) => item.id.toString()}
+          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
+            useNativeDriver: false,
+          })}
+          onViewableItemsChanged={viewableItemsChanged}
+          viewabilityConfig={viewConfig}
+          scrollEventThrottle={32}
+          ref={slidesRef}
+        />
+      </View>
+
+      <TouchableOpacity
+        onPress={() => {
+          if (currentWolfSlideIndex === hungryWolfOnboardingData.length - 1) {
+            navigation.navigate('Home');
+          } else scrollToTheNextLeonSlide();
+        }}
+        style={{
+          backgroundColor: '#FFC10E',
+          borderRadius: dimensions.width * 0.03,
+          paddingVertical: 21,
+          paddingHorizontal: 28,
+          marginBottom: 40,
+          alignSelf: 'center',
+          width: dimensions.width * 0.5,
+        }}
       >
-
-
-        <View style={{
-          display: 'flex',
-          backgroundColor: '#0D0172',
-          width: dimensions.width * 0.9,
-          height: dimensions.height * 0.7,
-          borderRadius: dimensions.width * 0.1,
-          alignSelf: 'center'
-        }}>
-          <FlatList
-            data={hungryWolfOnboardingData}
-            renderItem={renderWolfItem}
-            bounces={false}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled
-            keyExtractor={(item) => item.id.toString()}
-            onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
-              useNativeDriver: false,
-            })}
-            onViewableItemsChanged={viewableItemsChanged}
-            viewabilityConfig={viewConfig}
-            scrollEventThrottle={32}
-            ref={slidesRef}
-          />
-        </View>
-
-        <TouchableOpacity
-          onPress={() => {
-            if (currentWolfSlideIndex === hungryWolfOnboardingData.length - 1) {
-              navigation.navigate('Home');
-            } else scrollToTheNextLeonSlide();
-          }}
+        <Text
           style={{
-            backgroundColor: '#94174E',
-            borderRadius: dimensions.width * 0.03,
-            borderWidth: dimensions.width * 0.019,
-            borderColor: 'white',
-            paddingVertical: 21,
-            paddingHorizontal: 28,
-            marginBottom: 40,
-            alignSelf: 'center',
-            width: dimensions.width * 0.5,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: fontInter18ptRegular,
-              color: 'white',
-              fontSize: dimensions.width * 0.048,
-              textAlign: 'center',
-              fontWeight: 900,
-              textTransform: 'uppercase',
-            }}>
-            {currentWolfSlideIndex !== 2 ? 'Continue' : 'Start'}
-          </Text>
-        </TouchableOpacity>
+            fontFamily: fontInter18ptRegular,
+            color: 'black',
+            fontSize: dimensions.width * 0.048,
+            textAlign: 'center',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+          }}>
+          {currentWolfSlideIndex === 0 ? 'Next' : currentWolfSlideIndex === 0 ? 'Continue' : 'Start'}
+        </Text>
+      </TouchableOpacity>
 
-      </SafeAreaView>
-    </ImageBackground>
+    </SafeAreaView>
   );
 };
 
