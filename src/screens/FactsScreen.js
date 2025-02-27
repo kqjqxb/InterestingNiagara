@@ -161,7 +161,8 @@ const FactsScreen = ({}) => {
             </Text>
             <TouchableOpacity
               onPress={() => {
-                ShareNiagaraFact();
+                // ShareNiagaraFact();
+                handleShare();
               }}
               style={{
                 backgroundColor: '#FFC10E',

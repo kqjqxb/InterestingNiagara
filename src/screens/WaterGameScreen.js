@@ -18,7 +18,11 @@ const fontMontserratBold = 'Montserrat-Bold';
 const fontMontserratRegular = 'Montserrat-Regular';
 const fontMontserratBlack = 'Montserrat-Black';
 
-
+const formatTime = (time) => {
+  const minutes = Math.floor(time / 60);
+  const seconds = time % 60;
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+};
 
 const things = [
   {
@@ -242,7 +246,7 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
                 color: 'black',
               }}
             >
-              Time: {timeLost}
+              Time: {formatTime(timeLost)}
             </Text>
           </View>
           <View
@@ -430,7 +434,7 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
 
                   <TouchableOpacity
                     onPress={() => {
-                      setSelectedScreen('Home');
+                      // setSelectedScreen('Home');
                     }}
                     style={{
                       backgroundColor: '#008B47',
