@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Dimensions,
@@ -13,14 +13,12 @@ import { ScrollView } from 'react-native-gesture-handler';
 import places from '../components/allPlaces';
 import { XMarkIcon } from 'react-native-heroicons/solid';
 
-const fontInter18ptRegular = 'Inter18pt-Regular';
-const fontMontserratBold = 'Montserrat-Bold';
 const fontMontserratRegular = 'Montserrat-Regular';
 const fontMontserratBlack = 'Montserrat-Black';
 
 const PlacesScreen = ({ setSelectedScreen, selectedPlace, setSelectedPlace, setIsPlaceVisible, isPlaceDetailsVisible, setIsPlaceDetailsVisible }) => {
   const [dimensions, setDimensions] = useState(Dimensions.get('window'));
-
+  const scrollViewRef = useRef(null);
 
   const ShareNiagaraPlace = async (title) => {
     try {
@@ -35,6 +33,13 @@ const PlacesScreen = ({ setSelectedScreen, selectedPlace, setSelectedPlace, setI
       console.error('Error sharing:', error);
     }
   };
+
+
+  useEffect(() => {
+    if (!isPlaceDetailsVisible && scrollViewRef.current || isPlaceDetailsVisible && scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({ y: 0, animated: true });
+    }
+  }, [isPlaceDetailsVisible]);
 
   return (
     <SafeAreaView style={{
@@ -60,7 +65,7 @@ const PlacesScreen = ({ setSelectedScreen, selectedPlace, setSelectedPlace, setI
 
 
       {!isPlaceDetailsVisible ? (
-        <ScrollView>
+        <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
           <View style={{
             alignSelf: 'center',
             width: dimensions.width * 0.9,
@@ -147,7 +152,7 @@ const PlacesScreen = ({ setSelectedScreen, selectedPlace, setSelectedPlace, setI
           </View>
         </ScrollView>
       ) : (
-        <ScrollView>
+        <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
 
           <View style={{
             backgroundColor: 'white',
@@ -155,7 +160,7 @@ const PlacesScreen = ({ setSelectedScreen, selectedPlace, setSelectedPlace, setI
             borderRadius: dimensions.width * 0.03,
             marginBottom: dimensions.height * 0.019,
             width: dimensions.width * 0.9,
-            marginBottom: dimensions.height * 0.1,
+            marginBottom: dimensions.height * 0.16,
           }}>
             <Image
               source={selectedPlace.image}
@@ -199,7 +204,7 @@ const PlacesScreen = ({ setSelectedScreen, selectedPlace, setSelectedPlace, setI
               />
               <Text
                 style={{
-                  fontFamily: fontInter18ptRegular,
+                  fontFamily: fontMontserratRegular,
                   fontWeight: 400,
                   color: 'black',
                   fontSize: dimensions.width * 0.04,
@@ -210,7 +215,7 @@ const PlacesScreen = ({ setSelectedScreen, selectedPlace, setSelectedPlace, setI
               </Text>
               <Text
                 style={{
-                  fontFamily: fontInter18ptRegular,
+                  fontFamily: fontMontserratRegular,
                   fontWeight: 500,
                   color: 'black',
                   fontSize: dimensions.width * 0.04,
@@ -224,7 +229,7 @@ const PlacesScreen = ({ setSelectedScreen, selectedPlace, setSelectedPlace, setI
 
             <Text
               style={{
-                fontFamily: fontInter18ptRegular,
+                fontFamily: fontMontserratRegular,
                 fontWeight: 500,
                 color: 'black',
                 fontSize: dimensions.width * 0.04,
@@ -250,7 +255,7 @@ const PlacesScreen = ({ setSelectedScreen, selectedPlace, setSelectedPlace, setI
 
             <Text
               style={{
-                fontFamily: fontInter18ptRegular,
+                fontFamily: fontMontserratRegular,
                 fontWeight: 500,
                 color: 'black',
                 fontSize: dimensions.width * 0.04,
@@ -282,7 +287,7 @@ const PlacesScreen = ({ setSelectedScreen, selectedPlace, setSelectedPlace, setI
 
             <Text
               style={{
-                fontFamily: fontInter18ptRegular,
+                fontFamily: fontMontserratRegular,
                 fontWeight: 500,
                 color: 'black',
                 fontSize: dimensions.width * 0.04,

@@ -1,8 +1,8 @@
 import React from 'react';
-import HungryWolfStack from './StackNavigator';
+import InterestingNiagaraStack from './StackNavigator';
 
 function App() {
-  return <HungryWolfStack />;
+  return <InterestingNiagaraStack />;
 }
 
 export default App;

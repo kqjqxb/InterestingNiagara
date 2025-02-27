@@ -12,11 +12,9 @@ import {
 import * as Animatable from 'react-native-animatable';
 import facts from '../components/factsData';
 
-const fontMontserratBold = 'Montserrat-Bold';
-const fontMontserratRegular = 'Montserrat-Regular';
 const fontMontserratBlack = 'Montserrat-Black';
 
-const FactsScreen = ({ setSelectedScreen, selectedPlace, setSelectedPlace, setIsPlaceVisible, isPlaceDetailsVisible, setIsPlaceDetailsVisible }) => {
+const FactsScreen = ({}) => {
   const [dimensions, setDimensions] = useState(Dimensions.get('window'));
   const [isFactVisible, setIsFactVisible] = useState(false);
   const [previousFact, setPreviousFact] = useState(null);

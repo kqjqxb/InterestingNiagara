@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, FlatList, Animated, Text, TouchableOpacity, ImageBackground, Dimensions, Image, Platform, SafeAreaView } from 'react-native';
-import hungryWolfOnboardingData from '../components/hungryWolfOnboardingData';
+import OnboardingNiagaraData from '../components/OnboardingNiagaraData';
 import { useNavigation } from '@react-navigation/native';
 
 const fontInter18ptRegular = 'Inter18pt-Regular';
-
 const fontMontserratBold = 'Montserrat-Bold';
 
 const OnboardingScreen = () => {
@@ -38,7 +37,7 @@ const OnboardingScreen = () => {
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
   const scrollToTheNextLeonSlide = () => {
-    if (currentWolfSlideIndex < hungryWolfOnboardingData.length - 1) {
+    if (currentWolfSlideIndex < OnboardingNiagaraData.length - 1) {
       slidesRef.current.scrollToIndex({ index: currentWolfSlideIndex + 1 });
     } else {
       navigation.navigate('Home');
@@ -105,7 +104,7 @@ const OnboardingScreen = () => {
         alignSelf: 'center'
       }}>
         <FlatList
-          data={hungryWolfOnboardingData}
+          data={OnboardingNiagaraData}
           renderItem={renderWolfItem}
           bounces={false}
           horizontal
@@ -124,7 +123,7 @@ const OnboardingScreen = () => {
 
       <TouchableOpacity
         onPress={() => {
-          if (currentWolfSlideIndex === hungryWolfOnboardingData.length - 1) {
+          if (currentWolfSlideIndex === OnboardingNiagaraData.length - 1) {
             navigation.navigate('Home');
           } else scrollToTheNextLeonSlide();
         }}

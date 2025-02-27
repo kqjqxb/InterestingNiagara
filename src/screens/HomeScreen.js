@@ -8,27 +8,19 @@ import {
   ImageBackground,
   SafeAreaView,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
-
-
-import RulesScreen from './RulesScreen';
-import ShopScreen from './ShopScreen';
-import LevelsScreen from './LevelsScreen';
 import WaterGameScreen from './WaterGameScreen';
 import PlacesScreen from './PlacesScreen';
 import MapScreen from './MapScreen';
 import FactsScreen from './FactsScreen';
+import LoadingScreen from './LoadingScreen';
 
 const fontMontserratBold = 'Montserrat-Bold';
-const fontMontserratRegular = 'Montserrat-Regular';
 const fontMontserratBlack = 'Montserrat-Black';
 
 const HomeScreen = () => {
 
   const [dimensions, setDimensions] = useState(Dimensions.get('window'));
-  const [selectedScreen, setSelectedScreen] = useState('Home');
+  const [selectedScreen, setSelectedScreen] = useState('Loading');
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [isPlaceVisible, setIsPlaceVisible] = useState(false);
   const [isPlaceDetailsVisible, setIsPlaceDetailsVisible] = useState(false);
@@ -120,7 +112,7 @@ const HomeScreen = () => {
                   justifyContent: 'center',
                   width: '48%',
                   padding: dimensions.width * 0.035,
-                  marginBottom: dimensions.width * 0.04, // Додаємо відступ між рядками
+                  marginBottom: dimensions.width * 0.04, 
                 }}>
                 <Image
                   source={button.icon}
@@ -159,14 +151,16 @@ const HomeScreen = () => {
         <FactsScreen setSelectedScreen={setSelectedScreen} />
       ) : selectedScreen === 'Game' ? (
         <WaterGameScreen setSelectedScreen={setSelectedScreen} />
-      ) : null}
+      ) : selectedScreen === 'Loading' ? (
+        <LoadingScreen setSelectedScreen={setSelectedScreen} />
+      ): null}
 
 
 
 
 
 
-      {selectedScreen !== 'Home' && selectedScreen !== 'Game' && (
+      {selectedScreen !== 'Home' && selectedScreen !== 'Game' && selectedScreen !== 'Loading' && (
         <TouchableOpacity
           onPress={() => setSelectedScreen('Home')}
           style={{

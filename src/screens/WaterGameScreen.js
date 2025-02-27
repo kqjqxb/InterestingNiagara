@@ -14,11 +14,6 @@ import {
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
 
-const fontInter18ptRegular = 'Inter18pt-Regular';
-const fontInter18ptBold = 'Inter18pt-Bold';
-
-
-
 const fontMontserratBold = 'Montserrat-Bold';
 const fontMontserratRegular = 'Montserrat-Regular';
 const fontMontserratBlack = 'Montserrat-Black';
@@ -55,10 +50,9 @@ const things = [
 const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => {
   const [dimensions] = useState(Dimensions.get('window'));
 
-  const [timeLost, setTimeLost] = useState(70);
+  const [timeLost, setTimeLost] = useState(75);
 
-  const [pauseModalVisible, setPauseModalVisible] = useState(false);
-  const [resultsModalVisible, setResultsModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [restartTimer, setRestartTimer] = useState(0);
   const [score, setScore] = useState(0);
   const [reason, setReason] = useState('');
@@ -69,13 +63,12 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
 
   const panResponder = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => !pauseModalVisible && !resultsModalVisible,
+      onMoveShouldSetPanResponder: () => !modalVisible,
       onPanResponderMove: (evt, gestureState) => {
         const basketWidth = dimensions.height * 0.16;
         let newX = gestureState.moveX - (basketWidth / 2) - dimensions.width * 0.35;
 
-        // Ensure the basket stays within screen bounds
-        newX = Math.max(0 - dimensions.width * 0.35, Math.min(newX, dimensions.width - basketWidth));
+        newX = Math.max(0 - dimensions.width * 0.46, Math.min(newX, dimensions.width - basketWidth));
 
         basketX.setValue(newX);
       },
@@ -83,7 +76,6 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
         const basketWidth = dimensions.height * 0.16;
         let newX = gestureState.moveX - (basketWidth / 2) - dimensions.width * 0.44;
 
-        // Ensure the basket stays within screen bounds
         newX = Math.max(0 - dimensions.width * 0.35, Math.min(newX, dimensions.width - basketWidth));
 
         Animated.spring(basketX, {
@@ -94,7 +86,7 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
     })
   ).current;
 
-  const tryCollision = (item) => {
+  const tryNiagaraCollision = (item) => {
     const basketWidth = dimensions.height * 0.16;
     const margin = 0;
     const basketLeft = basketX._value - margin;
@@ -115,6 +107,7 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
     lastThing.current = randItem;
 
     const randX = Math.random() * (dimensions.width - 40);
+    const collisionThresY = dimensions.height * 0.77;
 
     const newItem = {
       id: Date.now(),
@@ -126,11 +119,11 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
 
     setFallingThings((prev) => [...prev, newItem]);
 
-    const collisionThresholdY = dimensions.height * 0.77;
+    
 
     const listenerId = newItem.y.addListener(({ value }) => {
-      if (!newItem.caught && value >= collisionThresholdY) {
-        if (tryCollision(newItem)) {
+      if (!newItem.caught && value >= collisionThresY) {
+        if (tryNiagaraCollision(newItem)) {
           newItem.caught = true;
           setTimeout(() => {
             setScore((prev) => prev + 1);
@@ -143,7 +136,7 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
 
     Animated.timing(newItem.y, {
       toValue: dimensions.height + 50,
-      duration: 3000,
+      duration: 2800,
       useNativeDriver: false,
     }).start(() => {
       newItem.y.removeListener(listenerId);
@@ -153,28 +146,26 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
     });
   };
 
-
   useEffect(() => {
-    const timerInterval = setInterval(() => {
+    const timeInterv = setInterval(() => {
       setTimeLost((prev) => {
         if (prev === 0) {
-          clearInterval(timerInterval);
-          setResultsModalVisible(true);
+          clearInterval(timeInterv);
+          setModalVisible(true);
           setReason('time');
           return 0;
         }
-        return pauseModalVisible ? prev : prev - 1;
+        return modalVisible ? prev : prev - 1;
       });
     }, 1000);
-    return () => clearInterval(timerInterval);
-  }, [restartTimer, pauseModalVisible]);
-
+    return () => clearInterval(timeInterv);
+  }, [restartTimer, modalVisible]);
 
   useEffect(() => {
     let timerId = null;
-    if (!pauseModalVisible && !resultsModalVisible) {
+    if (!modalVisible) {
       timerId = setInterval(() => {
-        if (!pauseModalVisible && !resultsModalVisible) {
+        if (!modalVisible) {
           spawnThings();
         }
       }, 1900);
@@ -182,11 +173,10 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
     return () => {
       if (timerId) clearInterval(timerId);
     };
-  }, [pauseModalVisible, resultsModalVisible]);
+  }, [modalVisible,]);
 
   return (
     <ImageBackground source={require('../assets/images/gameBg.png')} style={{ flex: 1, width: dimensions.width, height: dimensions.height }}>
-
       <SafeAreaView
         style={{
           width: dimensions.width,
@@ -207,7 +197,7 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
         >
           <TouchableOpacity
             onPress={() => {
-              setPauseModalVisible(true);
+              setModalVisible(true);
               setReason('pause');
             }}
             style={{
@@ -278,8 +268,6 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
               Score: {score}
             </Text>
           </View>
-
-
         </View>
 
         {fallingThings.map((item) => (
@@ -294,7 +282,7 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
           >
             <Image
               source={item.image}
-              style={{ width: 40, height: 40, resizeMode: 'contain', zIndex: 50 }}
+              style={{ width: dimensions.height * 0.07, height: dimensions.height * 0.07, resizeMode: 'contain', zIndex: 50 }}
             />
           </Animated.View>
         ))}
@@ -320,15 +308,11 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
         <Modal
           animationType="fade"
           transparent={true}
-          visible={resultsModalVisible || pauseModalVisible}
+          visible={modalVisible}
           onRequestClose={() => {
-            setResultsModalVisible(false);
-            setPauseModalVisible(false);
+            setModalVisible(false);
           }}
         >
-
-
-
           <SafeAreaView style={{
             flex: 1,
             justifyContent: 'center',
@@ -381,7 +365,6 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
                 justifyContent: 'space-between',
                 paddingVertical: dimensions.height * 0.05,
               }}>
-
                 <Text
                   style={{
                     fontFamily: fontMontserratBlack,
@@ -394,12 +377,10 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
                   {reason === 'pause' ? 'Pause' : 'Time is up'}
                 </Text>
 
-
-
-                {resultsModalVisible && !pauseModalVisible && (
+                {reason !== 'pause' && (
                   <Text
                     style={{
-                      fontFamily: fontInter18ptRegular,
+                      fontFamily: fontMontserratRegular,
                       color: 'black',
                       fontSize: dimensions.width * 0.05,
                       textAlign: 'center',
@@ -414,16 +395,15 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
                 <View style={{
                   marginTop: dimensions.height * 0.05,
                 }}>
-
                   <TouchableOpacity
                     onPress={() => {
-                      setResultsModalVisible(false);
-                      setPauseModalVisible(false);
+                      setModalVisible(false);
+                      setModalVisible(false);
                       setRestartTimer(prev => prev + 1);
 
                       if(reason !== 'pause') {
                         setScore(0);
-                        setTimeLost(70);
+                        setTimeLost(75);
                       }
                     }}
                     style={{

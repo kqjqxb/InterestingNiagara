@@ -16,7 +16,7 @@ import { loadUserData } from './src/redux/userSlice';
 
 const Stack = createNativeStackNavigator();
 
-const HungryWolfStack = () => {
+const InterestingNiagaraStack = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
@@ -32,58 +32,58 @@ const HungryWolfStack = () => {
 
 const AppNavigator = () => {
   const dispatch = useDispatch();
-  const [isHungryWolfOnbVisible, setIsHungryWolfOnbVisible] = useState(false);
+  const [isNiagaraOnboardVisible, setIsNiagaraOnboardVisible] = useState(false);
   const { user, setUser } = useContext(UserContext);
 
 
-  const [initializingHungryWolfApp, setInitializingHungryWolfApp] = useState(true);
+  const [initializingNiagaraApp, setInitializingNiagaraApp] = useState(true);
 
   useEffect(() => {
     dispatch(loadUserData());
   }, [dispatch]);
 
   useEffect(() => {
-    const loadHungryWolfUser = async () => {
+    const loadNiagaraUser = async () => {
       try {
         const deviceId = await DeviceInfo.getUniqueId();
         const storageKey = `currentUser_${deviceId}`;
         const storedWolfUser = await AsyncStorage.getItem(storageKey);
-        const isWolfOnbWasVisible = await AsyncStorage.getItem('isWolfOnbWasVisible');
+        const isWasNiagaraVisible = await AsyncStorage.getItem('isWasNiagaraVisible');
 
         if (storedWolfUser) {
           setUser(JSON.parse(storedWolfUser));
-          setIsHungryWolfOnbVisible(false);
-        } else if (isWolfOnbWasVisible) {
-          setIsHungryWolfOnbVisible(false);
+          setIsNiagaraOnboardVisible(false);
+        } else if (isWasNiagaraVisible) {
+          setIsNiagaraOnboardVisible(false);
         } else {
-          setIsHungryWolfOnbVisible(true);
-          await AsyncStorage.setItem('isWolfOnbWasVisible', 'true');
+          setIsNiagaraOnboardVisible(true);
+          await AsyncStorage.setItem('isWasNiagaraVisible', 'true');
         }
       } catch (error) {
         console.error('Error loading of cur user', error);
       } finally {
-        setInitializingHungryWolfApp(false);
+        setInitializingNiagaraApp(false);
       }
     };
-    loadHungryWolfUser();
+    loadNiagaraUser();
   }, [setUser]);
 
-  if (initializingHungryWolfApp) {
+  if (initializingNiagaraApp) {
     return (
       <View style={{
-        backgroundColor: 'rgba(12, 132, 167, 1)',
+        backgroundColor: '#008B47',
         alignItems: 'center',
         flex: 1,
         justifyContent: 'center',
       }}>
-        <ActivityIndicator size="large" color="white" />
+        <ActivityIndicator size="large" color="#FFC10E" />
       </View>
     );
   }
 
   return (
     <NavigationContainer>
-        <Stack.Navigator initialRouteName={isHungryWolfOnbVisible ? 'OnboardingScreen' : 'Home'}>
+        <Stack.Navigator initialRouteName={isNiagaraOnboardVisible ? 'OnboardingScreen' : 'Home'}>
           <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
           <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
@@ -92,4 +92,4 @@ const AppNavigator = () => {
 };
 
 
-export default HungryWolfStack;
+export default InterestingNiagaraStack;
