@@ -309,6 +309,7 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
           />
         </Animated.View>
 
+      </SafeAreaView>
         <Modal
           animationType="fade"
           transparent={true}
@@ -434,7 +435,7 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
 
                   <TouchableOpacity
                     onPress={() => {
-                      // setSelectedScreen('Home');
+                      setSelectedScreen('Home');
                     }}
                     style={{
                       backgroundColor: '#008B47',
@@ -463,7 +464,6 @@ const CatchScreen = ({ setSelectedScreen, selectedLevel, setSelectedLevel }) => 
             </SafeAreaView>
           </SafeAreaView>
         </Modal>
-      </SafeAreaView>
     </ImageBackground>
   );
 };

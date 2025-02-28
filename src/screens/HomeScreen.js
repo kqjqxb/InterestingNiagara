@@ -163,8 +163,7 @@ const HomeScreen = () => {
       {selectedScreen !== 'Home' && selectedScreen !== 'Game' && selectedScreen !== 'Loading' && (
         <TouchableOpacity
           onPress={() => {
-            // setSelectedScreen('Home');
-            goHome();
+            setSelectedScreen('Home');
           }}
           style={{
             backgroundColor: '#FFC10E',
